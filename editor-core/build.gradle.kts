@@ -3,13 +3,13 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":editor-color"))
-    implementation(project(":editor-gcode"))
-    implementation(project(":editor-gif"))
-    implementation(project(":editor-image"))
-    implementation(project(":editor-png"))
-    implementation(project(":editor-shape"))
-    implementation(project(":editor-svg"))
+    api(project(":editor-color"))
+    api(project(":editor-gcode"))
+    api(project(":editor-gif"))
+    api(project(":editor-image"))
+    api(project(":editor-png"))
+    api(project(":editor-shape"))
+    api(project(":editor-svg"))
 
     implementation(openrndr("core"))
     implementation(openrndr("dialogs"))
