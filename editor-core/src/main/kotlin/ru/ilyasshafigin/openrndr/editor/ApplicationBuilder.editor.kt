@@ -1,0 +1,54 @@
+package ru.ilyasshafigin.openrndr.editor
+
+import org.openrndr.ApplicationBuilder
+import org.openrndr.Fullscreen
+
+fun ApplicationBuilder.editor(
+    version: String = "1.0.0",
+    format: EditorFormat = EditorFormat.HD,
+    init: EditorBuilder<EditorSettings>.() -> Unit
+) = editor(
+    config = EditorConfig(
+        version = version,
+        format = format
+    ),
+    settings = object : EditorSettings {},
+    init = init
+)
+
+fun <S : EditorSettings> ApplicationBuilder.editor(
+    version: String = "1.0.0",
+    format: EditorFormat = EditorFormat.HD,
+    settings: S,
+    init: EditorBuilder<S>.() -> Unit
+) = editor(
+    config = EditorConfig(
+        version = version,
+        format = format
+    ),
+    settings = settings,
+    init = init
+)
+
+fun <S : EditorSettings> ApplicationBuilder.editor(
+    config: EditorConfig = EditorConfig(),
+    settings: S,
+    init: EditorBuilder<S>.() -> Unit
+) {
+    configure(config)
+
+    val builder = EditorBuilder<S>(config)
+    program = builder.build(config, settings, init).program
+}
+
+fun ApplicationBuilder.configure(config: EditorConfig) {
+    configure {
+        title = "${config.name} ${config.version}"
+        if (config.format == EditorFormat.FULLSCREEN) {
+            fullscreen = Fullscreen.CURRENT_DISPLAY_MODE
+        } else {
+            width = (config.format.width * config.previewScale).toInt()
+            height = (config.format.height * config.previewScale).toInt()
+        }
+    }
+}

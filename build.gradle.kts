@@ -1,23 +1,23 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    kotlin("jvm") version "1.3.72"
+    base
+    kotlin("jvm") version "1.3.72" apply false
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+allprojects {
+    group = "ru.ilyasshafigin.openrndr.editor"
+    version = "0.1.0"
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-}
-
-tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven(url = "https://dl.bintray.com/openrndr/openrndr")
     }
-    compileTestKotlin {
+}
+
+subprojects {
+    tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions.jvmTarget = "1.8"
     }
 }
