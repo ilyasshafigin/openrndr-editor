@@ -11,10 +11,10 @@ import ru.ilyasshafigin.openrndr.editor.editor
 fun main() = application {
     editor {
         reset {
-            val count = 5
-            val space = ColorSpace.default
+            val count = 10
+            val space = ColorSpace.ochreSand
             val clustering = PaletteClustering.K_MEANS
-            val distance = PaletteDistance.DEUTERANOPE
+            val distance = PaletteDistance.COMPROMISE
             val quality = 50
             val ultraPrecision = false
             val colors = generatePalette(
@@ -24,7 +24,7 @@ fun main() = application {
                 distance = distance,
                 quality = quality,
                 ultraPrecision = ultraPrecision
-            )
+            ).sortedBy { it.toHSVa().v }
 
             logger.info { colors.joinToString { it.toHexString() } }
 
