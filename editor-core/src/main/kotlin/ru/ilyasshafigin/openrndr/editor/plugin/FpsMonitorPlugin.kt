@@ -9,6 +9,7 @@ import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
+import org.openrndr.extra.shapes.roundedRectangle
 
 class FpsMonitorPlugin : EditorPlugin {
 
@@ -43,13 +44,19 @@ class FpsMonitorPlugin : EditorPlugin {
 
         if (settings.isShowFps) {
             drawer.isolated {
+                fill = ColorRGBa.BLACK.opacify(0.5)
+                stroke = null
+
+                val x = width - 80.0
+                val y = 20.0
+                val h = 30.0
+
+                roundedRectangle(x, y, width - y - x, 30.0, 8.0)
+
                 fontMap = font
 
-                fill = ColorRGBa.BLACK
-                text("${fps.toInt()} FPS", width - 60.0, 22.0)
-
                 fill = ColorRGBa.WHITE
-                text("${fps.toInt()} FPS", width - 60.0, 20.0)
+                text("${fps.toInt()} FPS", x + 8.0, y + h * 0.5 + 5.0)
             }
         }
     }

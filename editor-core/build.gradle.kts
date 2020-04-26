@@ -17,6 +17,7 @@ dependencies {
 
     implementation(orx("orx-gui"))
     implementation(orx("orx-glslify"))
+    implementation(orx("orx-shapes"))
 
     implementation(kotlinLogging())
 
