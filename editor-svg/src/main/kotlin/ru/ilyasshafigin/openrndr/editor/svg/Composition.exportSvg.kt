@@ -6,22 +6,17 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val fileDateFormat = SimpleDateFormat("YYYYMMddHHmmss", Locale.getDefault())
-private const val exportFolder = "export"
-private const val svgFolder = "svg"
-
 fun Composition.exportSvg(
     sketchName: String,
-    imageName: String = "",
-    timestamp: Long = System.currentTimeMillis()
+    imageName: String = sketchName,
+    folderPath: String = "export/${sketchName.toLowerCase()}/svg",
+    timestamp: Long = System.currentTimeMillis(),
+    fileDatePattern: String = "YYYYMMddHHmmss"
 ) {
-    val exportDirectory = File(exportFolder)
-    if (!exportDirectory.exists()) exportDirectory.mkdir()
-    val sketchDirectory = File(exportDirectory, sketchName.toLowerCase())
-    if (!sketchDirectory.exists()) sketchDirectory.mkdir()
-    val svgDirectory = File(sketchDirectory, svgFolder)
-    if (!svgDirectory.exists()) svgDirectory.mkdir()
+    val fileDateFormat = SimpleDateFormat(fileDatePattern, Locale.getDefault())
+    val directory = File(folderPath)
+    if (!directory.exists()) directory.mkdirs()
+    val fileName = "$imageName-${fileDateFormat.format(Date(timestamp))}.svg"
 
-    val fileName = "$imageName${if (imageName.isEmpty()) "" else "-"}$sketchName-${fileDateFormat.format(Date(timestamp))}.svg"
-    saveToFile(File(svgDirectory, fileName))
+    saveToFile(File(directory, fileName))
 }

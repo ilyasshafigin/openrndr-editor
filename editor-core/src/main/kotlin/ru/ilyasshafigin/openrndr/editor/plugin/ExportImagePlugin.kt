@@ -13,6 +13,7 @@ import org.openrndr.events.Event
 import org.openrndr.extra.parameters.ActionParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.shape.CompositionDrawer
+import ru.ilyasshafigin.openrndr.editor.launch
 
 class ExportImagePlugin : EditorPlugin {
 
@@ -85,53 +86,78 @@ class ExportImagePlugin : EditorPlugin {
     }
 
     fun performExportPng() {
-        isSaveFrame = true
-        png.trigger(ExportEvent())
+        if (!isSaveFrame) {
+            isSaveFrame = true
+            png.trigger(ExportEvent())
+        }
     }
 
     fun performExportSvg() {
-        isRecord = true
-        svg.trigger(ExportEvent())
+        if (!isRecord) {
+            isRecord = true
+            svg.trigger(ExportEvent())
+        }
     }
 
     /**
      * Сохраняет нарисованное изображение в PNG
      */
     fun exportPng(overrideImageName: String? = null) {
-        logger.debug { "Begin export PNG image '${overrideImageName ?: sourceFileName()}'" }
-        canvas.colorBuffer.exportPng(editor.name, overrideImageName ?: sourceFileName())
+        val imageName = overrideImageName ?: sourceFileName()
+
+        logger.info { "Start of exporting PNG image '$imageName'" }
+
+        editor.launch {
+            canvas.colorBuffer.exportPng(editor.name, imageName)
+
+            logger.info { "Export PNG image '$imageName' is complete" }
+        }
     }
 
     /**
      * Экспортирует `Composition`, нарисованный с помощью [compositionDrawer] в SVG файл
      */
     fun exportSvg(overrideImageName: String? = null) {
-        logger.debug { "Begin flatten shapes in composition" }
+        logger.info { "Begin of flatten shapes in composition" }
 
         val composition = compositionDrawer.composition.flatten()
+        val imageName = overrideImageName ?: sourceFileName()
 
-        logger.debug { "Begin export to SVG image '${overrideImageName ?: sourceFileName()}'" }
+        logger.info { "Start of exporting SVG image '$imageName'" }
 
-        composition.exportSvg(
-            sketchName = editor.name,
-            imageName = overrideImageName ?: sourceFileName(),
-            timestamp = sourceTimeStamp()
-        )
+        editor.launch {
+            composition.exportSvg(
+                sketchName = editor.name,
+                imageName = imageName,
+                timestamp = sourceTimeStamp()
+            )
+
+            logger.info { "Export SVG image '$imageName' is complete" }
+        }
     }
 
     /**
      * Экспортирует `Composition`, нарисованный с помощью [compositionDrawer] в GCODE файл
      */
     fun exportGcode(overrideImageName: String? = null) {
-        logger.debug { "Begin export vector image '${overrideImageName ?: sourceFileName()}'" }
+        logger.info { "Begin of flatten shapes in composition" }
 
-        compositionDrawer.composition.exportGcode(
-            sketchName = editor.name,
-            imageName = overrideImageName ?: sourceFileName(),
-            timestamp = sourceTimeStamp(),
-            width = canvas.width,
-            height = canvas.height
-        )
+        val composition = compositionDrawer.composition.flatten()
+        val imageName = overrideImageName ?: sourceFileName()
+
+        logger.info { "Start of exporting GCODE '$imageName'" }
+
+        editor.launch {
+            composition.exportGcode(
+                sketchName = editor.name,
+                imageName = imageName,
+                timestamp = sourceTimeStamp(),
+                width = canvas.width,
+                height = canvas.height
+            )
+
+            logger.info { "Export GCODE '$imageName' is complete" }
+        }
     }
 }
 

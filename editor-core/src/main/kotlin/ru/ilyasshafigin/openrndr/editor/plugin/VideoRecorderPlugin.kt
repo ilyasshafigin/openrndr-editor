@@ -36,7 +36,8 @@ class VideoRecorderPlugin(preset: VideoPreset = VideoPreset.HIGH_QUALITY) : Edit
         fun endRecording() = performEndRecording()
     }
 
-    var exportDirectory = "export"
+    var exportDirectory = "" // init on setup
+    var exportFileDatePattern = "YYYYMMddHHmmss"
 
     val profile: VideoWriterProfile = when(preset) {
         VideoPreset.REAL_TIME -> newRealTimeVideoWriterProfile()
@@ -59,6 +60,7 @@ class VideoRecorderPlugin(preset: VideoPreset = VideoPreset.HIGH_QUALITY) : Edit
     private var frames = 0
 
     override fun setup(editor: Editor<*>) {
+        exportDirectory = "export/${editor.name.toLowerCase()}/mp4"
         colorBuffer = editor.canvas.colorBuffer
         videoTarget = renderTarget(colorBuffer.width , colorBuffer.height) {
             colorBuffer()
@@ -73,15 +75,14 @@ class VideoRecorderPlugin(preset: VideoPreset = VideoPreset.HIGH_QUALITY) : Edit
             timestamp = System.currentTimeMillis()
             recordingDuration = duration
 
-            val fileDateFormat = SimpleDateFormat("YYYYMMddHHmmss", Locale.getDefault())
+            val fileDateFormat = SimpleDateFormat(exportFileDatePattern, Locale.getDefault())
             val sourceFileName = if (editor.isPluginInstalled<SourcePlugin>()) {
                 editor.source.fileName
             } else {
                 editor.name
             }
-            val imageName = sourceFileName.let { if (it.isEmpty()) it else "$it-" }
-            val sketchName = editor.name.toLowerCase()
-            val filename = "$exportDirectory/$sketchName/mp4/$imageName$sketchName-${fileDateFormat.format(Date(timestamp))}.mp4"
+            val imageName = sourceFileName.ifEmpty { editor.name.toLowerCase() }
+            val filename = "$exportDirectory/$imageName-${fileDateFormat.format(Date(timestamp))}.mp4"
 
             File(filename).parentFile.let { folder ->
                 if (!folder.exists()) {

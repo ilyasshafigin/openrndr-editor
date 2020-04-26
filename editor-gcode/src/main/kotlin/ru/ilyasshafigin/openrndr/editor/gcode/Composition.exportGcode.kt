@@ -6,10 +6,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val fileDateFormat = SimpleDateFormat("YYYYMMddHHmmss", Locale.getDefault())
-private const val exportFolder = "export"
-private const val gcodeFolder = "gcode"
-
 private const val penUp = "M05"
 private const val penDown = "M03"
 
@@ -23,21 +19,19 @@ private val Double.str get() = "%.3f".format(this)
 
 fun Composition.exportGcode(
     sketchName: String,
-    imageName: String = "",
+    imageName: String = sketchName,
+    folderPath: String = "export/${sketchName.toLowerCase()}/gcode",
     timestamp: Long = System.currentTimeMillis(),
+    fileDatePattern: String = "YYYYMMddHHmmss",
     width: Int,
     height: Int
 ) {
-    val exportDirectory = File(exportFolder)
-    if (!exportDirectory.exists()) exportDirectory.mkdir()
-    val sketchDirectory = File(exportDirectory, sketchName.toLowerCase())
-    if (!sketchDirectory.exists()) sketchDirectory.mkdir()
-    val gcodeDirectory = File(sketchDirectory, gcodeFolder)
-    if (!gcodeDirectory.exists()) gcodeDirectory.mkdir()
+    val fileDateFormat = SimpleDateFormat(fileDatePattern, Locale.getDefault())
+    val directory = File(folderPath)
+    if (!directory.exists()) directory.mkdirs()
+    val fileName = "$imageName-${fileDateFormat.format(Date(timestamp))}.nc"
+    val file = File(directory, fileName)
 
-    val fileName =
-        "$imageName${if (imageName.isEmpty()) "" else "-"}$sketchName-${fileDateFormat.format(Date(timestamp))}.nc"
-    val file = File(gcodeDirectory, fileName)
     file.writeStrings(writeGcode(this, width, height))
 }
 

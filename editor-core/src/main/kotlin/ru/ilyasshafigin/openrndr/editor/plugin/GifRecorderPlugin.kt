@@ -35,7 +35,8 @@ class GifRecorderPlugin : EditorPlugin {
     }
 
     val profile: GifWriterProfile = GifWriterProfile()
-    var exportDirectory = "export"
+    var exportDirectory = "" // init on setup
+    var exportFileDatePattern = "YYYYMMddHHmmss"
 
     val beginRecording = Event<BeginGifRecording>("editor-gif-recording-begin").postpone(true)
     val endRecording = Event<EndGifRecording>("editor-gif-recording-end").postpone(true)
@@ -52,6 +53,7 @@ class GifRecorderPlugin : EditorPlugin {
 
     override fun setup(editor: Editor<*>) {
         colorBuffer = editor.canvas.colorBuffer
+        exportDirectory = "export/${editor.name.toLowerCase()}/gif"
 
         beginRecording.listen { (duration) ->
             if (isRecording) {
@@ -62,15 +64,14 @@ class GifRecorderPlugin : EditorPlugin {
             timestamp = System.currentTimeMillis()
             recordingDuration = duration
 
-            val fileDateFormat = SimpleDateFormat("YYYYMMddHHmmss", Locale.getDefault())
+            val fileDateFormat = SimpleDateFormat(exportFileDatePattern, Locale.getDefault())
             val sourceFileName = if (editor.isPluginInstalled<SourcePlugin>()) {
                 editor.source.fileName
             } else {
                 editor.name
             }
-            val imageName = sourceFileName.let { if (it.isEmpty()) it else "$it-" }
-            val sketchName = editor.name
-            val filename = "$exportDirectory/$sketchName/gif/$imageName$sketchName-${fileDateFormat.format(Date(timestamp))}.gif"
+            val imageName = sourceFileName.ifEmpty { editor.name.toLowerCase() }
+            val filename = "$exportDirectory/$imageName-${fileDateFormat.format(Date(timestamp))}.gif"
 
             File(filename).parentFile.let { folder ->
                 if (!folder.exists()) {

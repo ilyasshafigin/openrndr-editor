@@ -19,6 +19,7 @@ dependencies {
     implementation(orx("orx-glslify"))
     implementation(orx("orx-shapes"))
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
     implementation(kotlinLogging())
 
     implementation(kotlin("stdlib"))

@@ -5,23 +5,19 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val fileDateFormat = SimpleDateFormat("YYYYMMddHHmmss", Locale.getDefault())
-private const val exportFolder = "export"
-private const val pngFolder = "png"
-
 fun ColorBuffer.exportPng(
     sketchName: String,
-    imageName: String = "",
-    timestamp: Long = System.currentTimeMillis()
+    imageName: String = sketchName,
+    folderPath: String = "export/${sketchName.toLowerCase()}/png",
+    timestamp: Long = System.currentTimeMillis(),
+    fileDatePattern: String = "YYYYMMddHHmmss",
+    async: Boolean = false
 ) {
-    val exportDirectory = File(exportFolder)
-    if (!exportDirectory.exists()) exportDirectory.mkdir()
-    val sketchDirectory = File(exportDirectory, sketchName.toLowerCase())
-    if (!sketchDirectory.exists()) sketchDirectory.mkdir()
-    val pngDirectory = File(sketchDirectory, pngFolder)
-    if (!pngDirectory.exists()) pngDirectory.mkdir()
+    val fileDateFormat = SimpleDateFormat(fileDatePattern, Locale.getDefault())
+    val directory = File(folderPath)
+    if (!directory.exists()) directory.mkdirs()
+    val fileName = "$imageName-${fileDateFormat.format(Date(timestamp))}.png"
 
-    val fileName = "$imageName${if (imageName.isEmpty()) "" else "-"}$sketchName-${fileDateFormat.format(Date(timestamp))}.png"
-    saveToFile(File(pngDirectory, fileName), async = true)
+    saveToFile(File(directory, fileName), async = async)
 }
 
