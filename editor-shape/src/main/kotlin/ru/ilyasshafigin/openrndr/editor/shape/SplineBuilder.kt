@@ -19,16 +19,17 @@ class SplineBuilder(
 
     val result: List<ShapeContour>
         get() {
-            return contours + if (segments.isNotEmpty()) {
+            val segmentContours = if (segments.isNotEmpty()) {
                 listOf(ShapeContour(segments.map { it }, false))
             } else {
                 emptyList()
             }
+            return contours + segmentContours
         }
 
-    private var curveBasisMatrix: Matrix44 = Matrix44.IDENTITY
-    private var curveDrawMatrix: Matrix44 = Matrix44.IDENTITY
-    private val curveVertices: MutableList<Vector2> = mutableListOf()
+    private var curveBasisMatrix = Matrix44.IDENTITY
+    private var curveDrawMatrix = Matrix44.IDENTITY
+    private val curveVertices = mutableListOf<Vector2>()
 
     init {
         init()
@@ -194,7 +195,7 @@ fun spline(
 ): ShapeContour {
     val sb = SplineBuilder(false, detail, tightness)
     sb.f()
-    return sb.result.first()
+    return sb.result.firstOrNull() ?: ShapeContour.EMPTY
 }
 
 fun splines(
