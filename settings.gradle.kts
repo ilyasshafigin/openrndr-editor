@@ -6,6 +6,7 @@ include(
     "editor-gif",
     "editor-image",
     "editor-math",
+    "editor-plugins",
     "editor-png",
     "editor-sample",
     "editor-shape",

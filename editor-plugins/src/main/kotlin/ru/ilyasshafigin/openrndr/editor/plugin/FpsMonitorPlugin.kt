@@ -3,6 +3,7 @@ package ru.ilyasshafigin.openrndr.editor.plugin
 import ru.ilyasshafigin.openrndr.editor.Editor
 import ru.ilyasshafigin.openrndr.editor.EditorPlugin
 import org.openrndr.color.ColorRGBa
+import org.openrndr.color.mix
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.FontImageMap
 import org.openrndr.draw.isolated
@@ -10,6 +11,7 @@ import org.openrndr.draw.loadFont
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.shapes.roundedRectangle
+import kotlin.math.pow
 
 class FpsMonitorPlugin : EditorPlugin {
 
@@ -44,7 +46,7 @@ class FpsMonitorPlugin : EditorPlugin {
 
         if (settings.isShowFps) {
             drawer.isolated {
-                fill = ColorRGBa.BLACK.opacify(0.5)
+                fill = mix(ColorRGBa.BLACK, ColorRGBa.RED, (1.0 - fps / 60.0).pow(2)).opacify(0.5)
                 stroke = null
 
                 val x = width - 80.0

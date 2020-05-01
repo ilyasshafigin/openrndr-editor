@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":editor-core"))
+    implementation(project(":editor-plugins"))
 
     implementation(openrndr("core"))
     implementation(openrndr("ffmpeg"))

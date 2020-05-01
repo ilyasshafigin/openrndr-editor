@@ -53,8 +53,8 @@ class ShaderPlugin : EditorPlugin {
     override val settings = Settings()
 
     /** Path to GLSL shader files */
-    var glslPath = "sketches-app/src/main/resources/glsl"
-    var glslifyPath = "sketches-app/src/main/resources/glslify"
+    var glslPath = "glsl"
+    var glslifyPath = "glslify"
 
     /** If [realTime] is true, then [time] will be real time, otherwise [time] will be calculated from [frameRate] */
     var realTime = true

@@ -34,7 +34,8 @@ class GifRecorderPlugin : EditorPlugin {
         fun endRecording() = performEndRecording()
     }
 
-    val profile: GifWriterProfile = GifWriterProfile()
+    val profile: GifWriterProfile =
+        GifWriterProfile()
     var exportDirectory = "" // init on setup
     var exportFileDatePattern = "YYYYMMddHHmmss"
 
