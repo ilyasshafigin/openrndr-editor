@@ -62,6 +62,10 @@ class SplineBuilder(
 
     fun isCanClose() = segments.isNotEmpty()
 
+    /**
+     * Close current spline contour.
+     * Reset current segments, vertices and anchor point.
+     */
     fun close() {
         require(segments.isNotEmpty()) { "cannot close contour with 0 segments" }
 
@@ -75,6 +79,9 @@ class SplineBuilder(
         curveVertices.clear()
     }
 
+    /**
+     * Reverse spline contour.
+     */
     fun reverse() {
         segments.forEachIndexed { index, segment ->
             segments[index] = segment.reverse
@@ -82,6 +89,10 @@ class SplineBuilder(
         segments.reverse()
     }
 
+    /**
+     * End current spline contour.
+     * Reset current segments (if [multipleContours] is true), vertices and anchor point.
+     */
     fun next() {
         if (multipleContours && segments.isNotEmpty()) {
             contours.add(ShapeContour(segments.map { it }, false))
@@ -89,6 +100,17 @@ class SplineBuilder(
         }
         anchor = Vector2.INFINITY
         curveVertices.clear()
+    }
+
+    /**
+     * Create new spline contour from current segments.
+     * Current segments will be cleared.
+     */
+    fun new() {
+        if (multipleContours && segments.isNotEmpty()) {
+            contours.add(ShapeContour(segments.map { it }, false))
+            segments.clear()
+        }
     }
 
     /**
