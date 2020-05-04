@@ -102,19 +102,21 @@ class VideoRecorderPlugin(preset: VideoPreset = VideoPreset.HIGH_QUALITY) : Edit
         }
 
         endRecording.listen { (isTimeout) ->
-            logger.info {
-                val duration = (frames * 1.0 / inputFrameRate).toInt()
-                if (isTimeout) {
-                    "End recording by timeout, duration: $duration sec"
-                } else {
-                    "End recording, duration: $duration sec"
+            if (isRecording) {
+                logger.info {
+                    val duration = (frames * 1.0 / inputFrameRate).toInt()
+                    if (isTimeout) {
+                        "End recording by timeout, duration: $duration sec"
+                    } else {
+                        "End recording, duration: $duration sec"
+                    }
                 }
+                isRecording = false
+                videoWriter.stop()
+                timestamp = 0L
+                recordingDuration = -1
+                frames = 0
             }
-            isRecording = false
-            videoWriter.stop()
-            timestamp = 0L
-            recordingDuration = -1
-            frames = 0
         }
     }
 

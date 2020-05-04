@@ -52,14 +52,23 @@ object Noise {
         seed = "${seedBase}-${seedTracking}"
     }
 
+    /**
+     * @return number from 0.0 to 1.0
+     */
     fun noise(x: Double): Double {
         return noise(x, 0.0, 0.0)
     }
 
+    /**
+     * @return number from 0.0 to 1.0
+     */
     fun noise(x: Double, y: Double): Double {
         return noise(x, y, 0.0)
     }
 
+    /**
+     * @return number from 0.0 to 1.0
+     */
     fun noise(x: Double, y: Double, z: Double): Double {
         var x0 = x
         var y0 = y

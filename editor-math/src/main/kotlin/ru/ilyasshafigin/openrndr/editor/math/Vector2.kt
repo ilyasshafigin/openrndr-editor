@@ -48,3 +48,16 @@ fun Vector2.Companion.fromAngle(theta: Double): Vector2 {
 fun Vector2.Companion.lerp(left: Vector2, right: Vector2, x: Double): Vector2 {
     return Vector2(lerp(left.x, right.x, x), lerp(left.y, right.y, x))
 }
+
+fun Vector2.coerceAtLeast(min: Double, minY: Double = min): Vector2 {
+    return Vector2(x.coerceAtLeast(min), y.coerceAtLeast(minY))
+}
+
+fun Vector2.coerceAtMost(max: Double, maxY: Double = max): Vector2 {
+    return Vector2(x.coerceAtMost(max), y.coerceAtMost(maxY))
+}
+
+fun Vector2.coerceIn(min: Double, max: Double, minY: Double = min, maxY: Double = max): Vector2 {
+    require(min > max) { "Cannot coerce value to an empty range: maximum $max is less than minimum $min." }
+    return Vector2(x.coerceIn(min, max), y.coerceIn(minY, maxY))
+}

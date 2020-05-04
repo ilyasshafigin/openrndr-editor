@@ -58,9 +58,9 @@ class Image(
         return Image(newColorBuffer)
     }
 
-    fun get(x: Int, y: Int, default: ColorRGBa = ColorRGBa.TRANSPARENT): ColorRGBa {
+    fun get(x: Int, y: Int, default: ColorRGBa? = null): ColorRGBa {
         if (x < 0 || y < 0 || x >= width || y >= height) {
-            return default
+            return default ?: colorBuffer.shadow[x.coerceIn(0, width - 1), y.coerceIn(0, height - 1)]
         }
 
         return colorBuffer.shadow[x, y]

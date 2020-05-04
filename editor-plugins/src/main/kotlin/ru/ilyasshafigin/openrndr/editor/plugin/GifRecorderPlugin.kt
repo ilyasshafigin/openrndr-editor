@@ -96,19 +96,21 @@ class GifRecorderPlugin : EditorPlugin {
         }
 
         endRecording.listen { (isTimeout) ->
-            logger.info {
-                val duration = (frames / profile.frameRate).toInt()
-                if (isTimeout) {
-                    "End gif recording by timeout, duration: $duration sec"
-                } else {
-                    "End gif recording, duration: $duration sec"
+            if (isRecording) {
+                logger.info {
+                    val duration = (frames / profile.frameRate).toInt()
+                    if (isTimeout) {
+                        "End gif recording by timeout, duration: $duration sec"
+                    } else {
+                        "End gif recording, duration: $duration sec"
+                    }
                 }
+                isRecording = false
+                gifWriter.stop()
+                timestamp = 0L
+                recordingDuration = -1
+                frames = 0
             }
-            isRecording = false
-            gifWriter.stop()
-            timestamp = 0L
-            recordingDuration = -1
-            frames = 0
         }
     }
 
