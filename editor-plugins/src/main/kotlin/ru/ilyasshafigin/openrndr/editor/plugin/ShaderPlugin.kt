@@ -53,8 +53,8 @@ class ShaderPlugin : EditorPlugin {
     override val settings = Settings()
 
     /** Path to GLSL shader files */
-    var glslPath = "glsl"
-    var glslifyPath = "glslify"
+    var glslPath = "data/shader"
+    var glslifyPath = "data/shader/glslify"
 
     /** If [realTime] is true, then [time] will be real time, otherwise [time] will be calculated from [frameRate] */
     var realTime = true
@@ -142,7 +142,7 @@ class ShaderPlugin : EditorPlugin {
     }
 
     fun addShaderFromPath(name: String, path: String): FragmentShader {
-        val shaderUrl = getShaderUrl(path)
+        val shaderUrl = shaderUrl(path)
         val shaderCode = preprocessGlslifyFromUrl(shaderUrl, glslifyPath = glslifyPath)
         val shader = FragmentShader(name, shaderCode)
         shaders[name] = shader
@@ -170,7 +170,7 @@ class ShaderPlugin : EditorPlugin {
         addShaderFromCode(name, code).config()
     }
 
-    private fun getShaderUrl(path: String) = "file:$glslPath/$path"
+    private fun shaderUrl(path: String) = "file:$glslPath/$path"
 
     @Description(title = "Shader")
     class Settings {

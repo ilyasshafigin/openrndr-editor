@@ -11,6 +11,7 @@ import org.openrndr.draw.loadFont
 import org.openrndr.extra.parameters.BooleanParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.shapes.roundedRectangle
+import ru.ilyasshafigin.openrndr.editor.resourceUrl
 import kotlin.math.pow
 
 class FpsMonitorPlugin : EditorPlugin {
@@ -26,7 +27,7 @@ class FpsMonitorPlugin : EditorPlugin {
     private lateinit var font: FontImageMap
 
     override fun setup(editor: Editor<*>) {
-        font = loadFont("data/fonts/IBMPlexMono-Regular.ttf", 16.0)
+        font = loadFont(resourceUrl("font/Roboto-Regular.ttf"), 16.0)
     }
 
     override fun reset(editor: Editor<*>) {

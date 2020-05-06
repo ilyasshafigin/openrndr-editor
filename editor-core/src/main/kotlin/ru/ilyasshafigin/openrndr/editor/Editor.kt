@@ -1,6 +1,8 @@
 package ru.ilyasshafigin.openrndr.editor
 
-import ru.ilyasshafigin.openrndr.editor.extension.ScreenOutput
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Job
 import mu.KotlinLogging
 import org.openrndr.Application
 import org.openrndr.Extension
@@ -13,7 +15,11 @@ import org.openrndr.extra.gui.GUI
 import org.openrndr.extra.parameters.ActionParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.internal.Driver
+import org.openrndr.launch
 import org.openrndr.math.Vector2
+import ru.ilyasshafigin.openrndr.editor.extension.ScreenOutput
+import java.net.URL
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Общий класс редактора.
@@ -208,4 +214,34 @@ abstract class Editor<S : EditorSettings>(
             }
         }
     }
+}
+
+fun Editor<*>.launch(
+    context: CoroutineContext = program.dispatcher,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    block: suspend CoroutineScope.() -> Unit
+): Job = program.launch(context, start, block)
+
+/**
+ * Resolves resource named [name] relative to [clazz] as a [String] based URL.
+ */
+fun resourceUrl(name: String, clazz: Class<*> = Editor::class.java): String {
+    var resource: URL? = clazz.getResource(name)
+    return if (resource == null) {
+        resource = clazz.classLoader.getResource(name)
+        if (resource == null) {
+            return name
+        } else {
+            resource.toExternalForm()
+        }
+    } else {
+        resource.toExternalForm()
+    }
+}
+
+/**
+ * Resolves resource named [name] relative to [clazz] as a [String] based URL.
+ */
+fun Editor<*>.resourceUrl(name: String, clazz: Class<*> = this::class.java): String {
+    return resourceUrl(name, clazz)
 }
