@@ -1,7 +1,7 @@
 package ru.ilyasshafigin.openrndr.editor.math
 
-import org.openrndr.extra.noise.lerp
 import org.openrndr.math.Vector2
+import org.openrndr.math.mix
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -45,8 +45,8 @@ fun Vector2.Companion.fromAngle(theta: Double): Vector2 {
     return Vector2(cos(theta.radians), sin(theta.radians))
 }
 
-fun Vector2.Companion.lerp(left: Vector2, right: Vector2, x: Double): Vector2 {
-    return Vector2(lerp(left.x, right.x, x), lerp(left.y, right.y, x))
+fun Vector2.Companion.mix(left: Vector2, right: Vector2, x: Double): Vector2 {
+    return Vector2(mix(left.x, right.x, x), mix(left.y, right.y, x))
 }
 
 fun Vector2.coerceAtLeast(min: Double, minY: Double = min): Vector2 {

@@ -3,8 +3,8 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.internal.os.OperatingSystem
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 
-val openrndrVersion = "0.3.42-rc.3"
-val orxVersion = "0.3.51-rc.3"
+val openrndrVersion = "0.3.43"
+val orxVersion = "0.3.52"
 val lwjglVersion = "3.2.3"
 val loggingVersion = "1.7.9"
 

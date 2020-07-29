@@ -28,12 +28,12 @@ fun ColorBuffer.convertToRGB(): ColorBuffer {
     return colorBuffer
 }
 
-val ColorBuffer.pixels: IntArray
-    get() {
-        val arrays = shadow.mapInt { r, g, b, a -> ColorRGBa(r, g, b, a).toHex() }
-        val result = IntArray(width * height)
-        for (i in arrays.indices) {
-            arrays[i].copyInto(result, i * width)
-        }
-        return result
-    }
+//val ColorBuffer.pixels: IntArray
+//    get() {
+//        val arrays = shadow.mapInt { r, g, b, a -> ColorRGBa(r, g, b, a).toHex() }
+//        val result = IntArray(width * height)
+//        for (i in arrays.indices) {
+//            arrays[i].copyInto(result, i * width)
+//        }
+//        return result
+//    }

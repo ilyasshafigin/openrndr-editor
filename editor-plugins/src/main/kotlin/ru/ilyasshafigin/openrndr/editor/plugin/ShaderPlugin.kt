@@ -183,10 +183,10 @@ class ShaderPlugin : EditorPlugin {
 open class FragmentShader(private val shader: Shader) {
 
     constructor(name: String, fragmentCode: String) :
-        this(Shader.createFromCode(filterVertexCode, fragmentCode, name))
+        this(Shader.createFromCode(vsCode = filterVertexCode, fsCode = fragmentCode, name = name))
 
     constructor(name: String, vertexCode: String, fragmentCode: String) :
-        this(Shader.createFromCode(vertexCode, fragmentCode, name))
+        this(Shader.createFromCode(vsCode = vertexCode, fsCode = fragmentCode, name = name))
 
     /**
      * parameter map
