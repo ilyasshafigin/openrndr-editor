@@ -94,6 +94,7 @@ class SplineBuilder(
      * Reset current segments (if [multipleContours] is true), vertices and anchor point.
      */
     fun next() {
+        require(multipleContours) { "`multipleContours` is false" }
         if (multipleContours && segments.isNotEmpty()) {
             contours.add(ShapeContour(segments.map { it }, false))
             segments.clear()
@@ -122,7 +123,7 @@ class SplineBuilder(
     }
 
     /**
-     * Modifies the quality of forms created with [vertex]& The parameter [tightness] determines how
+     * Modifies the quality of forms created with [vertex]. The parameter [tightness] determines how
      * the curve fits to the vertex points. The value 0.0 is the default value for [tightness]
      * (this value defines the curves to be Catmull-Rom splines) and the value 1.0 connects all
      * the points with straight lines. Values within the range -5.0 and 5.0 will deform the curves
