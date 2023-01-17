@@ -1,13 +1,10 @@
 plugins {
-    kotlin("jvm")
+    id("editor-module")
 }
 
 dependencies {
     implementation(project(":editor-color"))
 
-    implementation(openrndr("core"))
-
-    implementation(lwjgl())
-
-    implementation(kotlin("stdlib"))
+    implementation(libs.lwjgl)
+    implementation(openrndr.core)
 }

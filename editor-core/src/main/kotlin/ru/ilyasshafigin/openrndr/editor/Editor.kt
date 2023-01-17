@@ -5,10 +5,10 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import mu.KotlinLogging
 import org.openrndr.Application
+import org.openrndr.ApplicationMouse
 import org.openrndr.Extension
 import org.openrndr.KEY_ESCAPE
 import org.openrndr.Keyboard
-import org.openrndr.Mouse
 import org.openrndr.Program
 import org.openrndr.draw.Drawer
 import org.openrndr.extra.gui.GUI
@@ -22,17 +22,16 @@ import java.net.URL
 import kotlin.coroutines.CoroutineContext
 
 /**
- * Общий класс редактора.
+ * General editor class.
  *
  * Lifecycle events:
  *  * [setup]
  *  * [draw]
  *  * [reset]
- *
- * @property config editor config
  */
 @Suppress("LeakingThis")
 abstract class Editor<S : EditorSettings>(
+    /** Editor config */
     val config: EditorConfig
 ) {
 
@@ -64,7 +63,7 @@ abstract class Editor<S : EditorSettings>(
     val clipboard: Program.Clipboard get() = program.clipboard
     val window: Program.Window get() = program.window
     val keyboard: Keyboard get() = program.keyboard
-    val mouse: Mouse get() = program.mouse
+    val mouse: ApplicationMouse get() = program.mouse
 
     /**  */
     var name: String = config.name
@@ -124,13 +123,13 @@ abstract class Editor<S : EditorSettings>(
     }
 
     /**
-     * This is ran exactly once before the first call to draw()
+     * This is run exactly once before the first call to draw()
      */
     open fun setup() {
     }
 
     /**
-     * This is ran exactly once before the call to [draw], when a reset is performed
+     * This is run exactly once before the call to [draw], when a reset is performed
      */
     open fun reset() {
     }
@@ -179,7 +178,7 @@ abstract class Editor<S : EditorSettings>(
 
     class EditorProgram(private val editor: Editor<*>) : Program() {
 
-        override fun setup() {
+        override suspend fun setup() {
             editor.preSetup()
             editor.setup()
             editor.postSetup()

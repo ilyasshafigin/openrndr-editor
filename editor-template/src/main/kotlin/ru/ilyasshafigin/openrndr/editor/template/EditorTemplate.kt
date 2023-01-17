@@ -23,9 +23,9 @@ private class TemplateEditor(config: EditorConfig) : Editor<Settings>(config) {
     override fun reset() {
         canvas.draw(drawer) {
             if (source.isSelected) {
-                background(source.image.get(0, 0))
+                clear(source.image.get(0, 0))
             } else {
-                background(ColorRGBa.WHITE)
+                clear(ColorRGBa.WHITE)
             }
         }
     }

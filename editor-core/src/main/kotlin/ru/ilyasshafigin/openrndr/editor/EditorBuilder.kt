@@ -3,7 +3,9 @@ package ru.ilyasshafigin.openrndr.editor
 import org.openrndr.draw.Drawer
 import org.openrndr.math.Vector2
 
-class EditorBuilder<S : EditorSettings>(val config: EditorConfig) {
+class EditorBuilder<S : EditorSettings>(
+    val config: EditorConfig
+) {
 
     private var setupFun: Editor<S>.() -> Unit = {}
     private var drawFun: Editor<S>.(Drawer) -> Unit = {}

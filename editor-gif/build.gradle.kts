@@ -1,12 +1,9 @@
 plugins {
-    kotlin("jvm")
+    id("editor-module")
 }
 
 dependencies {
-    implementation(openrndr("core"))
-
-    implementation(lwjgl())
-    implementation(kotlinLogging())
-
-    implementation(kotlin("stdlib"))
+    implementation(libs.lwjgl)
+    implementation(libs.util.kotlinLogging)
+    implementation(openrndr.core)
 }

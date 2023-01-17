@@ -35,8 +35,8 @@ class ExportImagePlugin : EditorPlugin {
     /** Флаг сохранения обработанного изображения */
     private var isSaveFrame: Boolean = false
 
-    val png = Event<ExportEvent>("editor-export-png").postpone(true)
-    val svg = Event<ExportEvent>("editor-export-svg").postpone(true)
+    val png = Event<ExportEvent>("editor-export-png").apply { postpone = true }
+    val svg = Event<ExportEvent>("editor-export-svg").apply { postpone = true }
 
     private val logger = KotlinLogging.logger {}
 

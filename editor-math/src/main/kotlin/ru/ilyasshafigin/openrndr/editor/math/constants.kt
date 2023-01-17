@@ -11,4 +11,5 @@ const val TWO_PI = 2.0 * Math.PI
 const val DEG_TO_RAD = Math.PI / 180.0
 const val RAD_TO_DEG = 180.0 / Math.PI
 
-const val GOLDEN_RATIO = 1.6180339887498948482
+const val GOLDEN_RATIO = 1.6180339887498948482 // = (1 + sqrt(5)) / 2
+const val GOLDEN_ANGLE = 137.5077640500378546463487 // 360 / GOLDEN_RATIO^2

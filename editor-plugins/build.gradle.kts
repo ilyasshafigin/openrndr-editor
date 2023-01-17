@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    id("editor-module")
 }
 
 dependencies {
@@ -12,17 +12,14 @@ dependencies {
     api(project(":editor-shape"))
     api(project(":editor-svg"))
 
-    implementation(openrndr("core"))
-    implementation(openrndr("dialogs"))
-    implementation(openrndr("ffmpeg"))
-
-    implementation(orx("orx-gui"))
-    implementation(orx("orx-glslify"))
-    implementation(orx("orx-shapes"))
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
-    implementation(kotlinLogging())
-
-    implementation(kotlin("stdlib"))
-    implementation(kotlin("reflect"))
+    implementation(libs.util.kotlinLogging)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(openrndr.core)
+    implementation(openrndr.dialogs)
+    implementation(openrndr.ffmpeg)
+    implementation(openrndr.orx.glslify)
+    implementation(openrndr.orx.noise)
+    implementation(openrndr.orx.parameters)
+    implementation(openrndr.orx.shapes)
 }

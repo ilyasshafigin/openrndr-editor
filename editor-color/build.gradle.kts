@@ -1,11 +1,8 @@
 plugins {
-    kotlin("jvm")
+    id("editor-module")
 }
 
 dependencies {
-    implementation(openrndr("core"))
-
-    implementation(orx("orx-noise"))
-
-    implementation(kotlin("stdlib"))
+    implementation(openrndr.core)
+    implementation(openrndr.orx.noise)
 }

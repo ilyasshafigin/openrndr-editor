@@ -1,8 +1,5 @@
 package ru.ilyasshafigin.openrndr.editor.plugin
 
-import ru.ilyasshafigin.openrndr.editor.Editor
-import ru.ilyasshafigin.openrndr.editor.EditorPlugin
-import ru.ilyasshafigin.openrndr.editor.gif.GifWriter
 import mu.KotlinLogging
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer
@@ -13,6 +10,9 @@ import org.openrndr.draw.isolatedWithTarget
 import org.openrndr.events.Event
 import org.openrndr.extra.parameters.ActionParameter
 import org.openrndr.extra.parameters.Description
+import ru.ilyasshafigin.openrndr.editor.Editor
+import ru.ilyasshafigin.openrndr.editor.EditorPlugin
+import ru.ilyasshafigin.openrndr.editor.gif.GifWriter
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,13 +34,12 @@ class GifRecorderPlugin : EditorPlugin {
         fun endRecording() = performEndRecording()
     }
 
-    val profile: GifWriterProfile =
-        GifWriterProfile()
+    val profile: GifWriterProfile = GifWriterProfile()
     var exportDirectory = "" // init on setup
     var exportFileDatePattern = "YYYYMMddHHmmss"
 
-    val beginRecording = Event<BeginGifRecording>("editor-gif-recording-begin").postpone(true)
-    val endRecording = Event<EndGifRecording>("editor-gif-recording-end").postpone(true)
+    val beginRecording = Event<BeginGifRecording>("editor-gif-recording-begin").apply { postpone = true }
+    val endRecording = Event<EndGifRecording>("editor-gif-recording-end").apply { postpone = true }
 
     private lateinit var colorBuffer: ColorBuffer
     private lateinit var gifWriter: GifWriter
@@ -54,7 +53,7 @@ class GifRecorderPlugin : EditorPlugin {
 
     override fun setup(editor: Editor<*>) {
         colorBuffer = editor.canvas.colorBuffer
-        exportDirectory = "export/${editor.name.toLowerCase()}/gif"
+        exportDirectory = "export/${editor.name.lowercase()}/gif"
 
         beginRecording.listen { (duration) ->
             if (isRecording) {
@@ -71,7 +70,7 @@ class GifRecorderPlugin : EditorPlugin {
             } else {
                 editor.name
             }
-            val imageName = sourceFileName.ifEmpty { editor.name.toLowerCase() }
+            val imageName = sourceFileName.ifEmpty { editor.name.lowercase() }
             val filename = "$exportDirectory/$imageName-${fileDateFormat.format(Date(timestamp))}.gif"
 
             File(filename).parentFile.let { folder ->
@@ -136,7 +135,7 @@ class GifRecorderPlugin : EditorPlugin {
 
             frames++
             if (recordingDuration > 0.0) {
-                val duration =  frames / profile.frameRate
+                val duration = frames / profile.frameRate
                 if (duration >= recordingDuration) {
                     performEndRecording(isTimeout = true)
                 }

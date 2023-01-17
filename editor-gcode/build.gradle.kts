@@ -1,9 +1,7 @@
 plugins {
-    kotlin("jvm")
+    id("editor-module")
 }
 
 dependencies {
-    implementation(openrndr("core"))
-
-    implementation(kotlin("stdlib"))
+    implementation(openrndr.core)
 }

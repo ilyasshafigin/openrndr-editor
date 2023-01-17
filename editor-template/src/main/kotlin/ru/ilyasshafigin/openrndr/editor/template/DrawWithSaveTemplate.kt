@@ -12,10 +12,8 @@ fun main() = application {
 
         reset {
             canvas.draw(drawer) {
-                background(ColorRGBa.WHITE)
-
+                clear(ColorRGBa.WHITE)
                 fill = ColorRGBa.BLACK
-
                 circle(width * 0.5, height * 0.5, 300.0)
             }
         }

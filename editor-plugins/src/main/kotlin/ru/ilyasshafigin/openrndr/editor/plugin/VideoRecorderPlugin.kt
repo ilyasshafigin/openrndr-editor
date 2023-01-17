@@ -1,7 +1,5 @@
 package ru.ilyasshafigin.openrndr.editor.plugin
 
-import ru.ilyasshafigin.openrndr.editor.Editor
-import ru.ilyasshafigin.openrndr.editor.EditorPlugin
 import mu.KotlinLogging
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorBuffer
@@ -15,6 +13,8 @@ import org.openrndr.extra.parameters.ActionParameter
 import org.openrndr.extra.parameters.Description
 import org.openrndr.ffmpeg.VideoWriter
 import org.openrndr.ffmpeg.VideoWriterProfile
+import ru.ilyasshafigin.openrndr.editor.Editor
+import ru.ilyasshafigin.openrndr.editor.EditorPlugin
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,8 +45,8 @@ class VideoRecorderPlugin(preset: VideoPreset = VideoPreset.HIGH_QUALITY) : Edit
         VideoPreset.INSTAGRAM -> newInstagramVideoWriterProfile()
     }
 
-    val beginRecording = Event<BeginVideoRecording>("editor-video-recording-begin").postpone(true)
-    val endRecording = Event<EndVideoRecording>("editor-video-recording-end").postpone(true)
+    val beginRecording = Event<BeginVideoRecording>("editor-video-recording-begin").apply { postpone = true }
+    val endRecording = Event<EndVideoRecording>("editor-video-recording-end").apply { postpone = true }
 
     private lateinit var colorBuffer: ColorBuffer
     private lateinit var videoWriter: VideoWriter
@@ -60,7 +60,7 @@ class VideoRecorderPlugin(preset: VideoPreset = VideoPreset.HIGH_QUALITY) : Edit
     private var frames = 0
 
     override fun setup(editor: Editor<*>) {
-        exportDirectory = "export/${editor.name.toLowerCase()}/mp4"
+        exportDirectory = "export/${editor.name.lowercase()}/mp4"
         colorBuffer = editor.canvas.colorBuffer
         videoTarget = renderTarget(colorBuffer.width , colorBuffer.height) {
             colorBuffer()
@@ -81,7 +81,7 @@ class VideoRecorderPlugin(preset: VideoPreset = VideoPreset.HIGH_QUALITY) : Edit
             } else {
                 editor.name
             }
-            val imageName = sourceFileName.ifEmpty { editor.name.toLowerCase() }
+            val imageName = sourceFileName.ifEmpty { editor.name.lowercase() }
             val filename = "$exportDirectory/$imageName-${fileDateFormat.format(Date(timestamp))}.mp4"
 
             File(filename).parentFile.let { folder ->
@@ -176,6 +176,7 @@ fun newRealTimeVideoWriterProfile(
     // to prevent blocky artifacts on gradients, ffmpeg default is 23
     frameRate: Double = 60.0
 ) : VideoWriterProfile = object : VideoWriterProfile() {
+    override val fileExtension: String = "mp4"
     override fun arguments(): Array<String> = arrayOf(
         "-vcodec", "libx264",
         "-pix_fmt", "yuv420p",
@@ -197,6 +198,7 @@ fun newHighQualityVideoWriterProfile(
     // to prevent blocky artifacts on gradients, ffmpeg default is 23
     frameRate: Double = 60.0
 ) : VideoWriterProfile = object : VideoWriterProfile() {
+    override val fileExtension: String = "mp4"
     override fun arguments(): Array<String> = arrayOf(
         "-vcodec", "libx264",
         "-pix_fmt", "yuv420p",
@@ -219,6 +221,7 @@ fun newInstagramVideoWriterProfile(
     constantRateFactor: Int = 20, // seems that maybe it should go really up for instagram?
     frameRate: Double = 30000.0 / 1001.0
 ) : VideoWriterProfile = object : VideoWriterProfile() {
+    override val fileExtension: String = "mp4"
     override fun arguments(): Array<String> = arrayOf(
         "-vcodec", "libx264",
         "-pix_fmt", "yuv420p",

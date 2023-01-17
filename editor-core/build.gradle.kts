@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    id("editor-module")
 }
 
 dependencies {
@@ -7,13 +7,10 @@ dependencies {
     api(project(":editor-image"))
     api(project(":editor-shape"))
 
-    implementation(openrndr("core"))
-
-    implementation(orx("orx-gui"))
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
-    implementation(kotlinLogging())
-
-    implementation(kotlin("stdlib"))
-    implementation(kotlin("reflect"))
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.util.kotlinLogging)
+    implementation(openrndr.application)
+    implementation(openrndr.core)
+    implementation(openrndr.orx.gui)
 }

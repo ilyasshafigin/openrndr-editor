@@ -30,7 +30,7 @@ fun main() = application {
 
         draw {
             drawer.isolated {
-                background(ColorRGBa.WHITE)
+                clear(ColorRGBa.WHITE)
                 composition(export.compositionDrawer.composition)
             }
         }

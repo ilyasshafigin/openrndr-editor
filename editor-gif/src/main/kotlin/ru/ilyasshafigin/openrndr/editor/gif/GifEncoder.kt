@@ -309,7 +309,7 @@ class GifEncoder(
     @Throws(IOException::class)
     private fun OutputStream.writeString(s: String) {
         for (element in s) {
-            write(element.toInt())
+            write(element.code)
         }
     }
 }
@@ -357,7 +357,7 @@ internal class NeuQuant(thepic: ByteArray, len: Int, sample: Int) {
     /* for network lookup - really 256 */
     private val bias = IntArray(netsize)
     /* bias and freq arrays for learning */
-    private val freq = IntArray(netsize) { i -> intbias / netsize }
+    private val freq = IntArray(netsize) { _ -> intbias / netsize }
     private val radpower = IntArray(initrad)
 
     /**
@@ -393,8 +393,8 @@ internal class NeuQuant(thepic: ByteArray, len: Int, sample: Int) {
      * unbias)
      */
     private fun inxbuild() {
-        var smallpos = 0
-        var smallval = 0
+        var smallpos: Int
+        var smallval: Int
         var previouscol = 0
         var startpos = 0
         for (i in 0 until netsize) {
@@ -441,9 +441,9 @@ internal class NeuQuant(thepic: ByteArray, len: Int, sample: Int) {
         alphadec = 30 + (samplefac - 1) / 3
         var alpha = initalpha
         var radius = initradius
-        var rad: Int = radius shr radiusbiasshift
+        var rad = radius shr radiusbiasshift
         val samplepixels = lengthcount / (3 * samplefac)
-        var delta: Int = samplepixels / ncycles
+        var delta = samplepixels / ncycles
         var pix = 0
         val lim = lengthcount
         if (rad <= 1) rad = 0
@@ -581,7 +581,7 @@ internal class NeuQuant(thepic: ByteArray, len: Int, sample: Int) {
                     p[0] -= a * (p[0] - b) / alpharadbias
                     p[1] -= a * (p[1] - g) / alpharadbias
                     p[2] -= a * (p[2] - r) / alpharadbias
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }
             if (k > lo) {
@@ -590,7 +590,7 @@ internal class NeuQuant(thepic: ByteArray, len: Int, sample: Int) {
                     p[0] -= a * (p[0] - b) / alpharadbias
                     p[1] -= a * (p[1] - g) / alpharadbias
                     p[2] -= a * (p[2] - r) / alpharadbias
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }
         }
@@ -801,19 +801,19 @@ internal class LZWEncoder(
     }
 
     @Throws(IOException::class)
-    fun compress(init_bits: Int, outs: OutputStream) {
+    fun compress(initBits: Int, outs: OutputStream) {
         var fcode: Int
         var i /* = 0 */: Int
         var c: Int
         var ent: Int
         var disp: Int
         // Set up the globals: g_init_bits - initial number of bits
-        g_init_bits = init_bits
+        g_init_bits = initBits
         // Set up the necessary values
         clear_flg = false
         n_bits = g_init_bits
         maxcode = MAXCODE(n_bits)
-        ClearCode = 1 shl init_bits - 1
+        ClearCode = 1 shl initBits - 1
         EOFCode = ClearCode + 1
         free_ent = ClearCode + 2
         a_count = 0 // clear packet

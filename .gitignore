@@ -4,3 +4,4 @@ out/
 .idea/
 .gradle/
 export/
+gui-parameters/

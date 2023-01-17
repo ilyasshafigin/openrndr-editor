@@ -44,7 +44,7 @@ fun generatePalette(
         PaletteClustering.K_MEANS -> kMeans(distanceFunc, colorFilter, ultraPrecision, quality, colors)
     }
 
-    colors.sortWith(Comparator { a, b -> -distanceFunc(a, b).sign.toInt() })
+    colors.sortWith { a, b -> -distanceFunc(a, b).sign.toInt() }
     return colors.map(ColorLABa::toRGBa)
 }
 
@@ -82,7 +82,7 @@ fun generatePalette(
         PaletteClustering.K_MEANS -> kMeans(distanceFunc, colorFilter, ultraPrecision, quality, colors)
     }
 
-    colors.sortWith(Comparator { a, b -> distanceFunc(a, b).sign.toInt() })
+    colors.sortWith { a, b -> distanceFunc(a, b).sign.toInt() }
     return colors.map(ColorLABa::toRGBa)
 }
 

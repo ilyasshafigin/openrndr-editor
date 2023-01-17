@@ -8,7 +8,7 @@ import org.openrndr.math.Vector2
  *
  * Determine the number of columns and rows based on sketch's width and height
  *
- * @property field A flow field is a two dimensional array of Vectors
+ * @property field A flow field is a two-dimensional array of Vectors
  * @property columns Columns
  * @property rows Rows
  * @property resolution Resolution. How large is each "cell" of the flow field

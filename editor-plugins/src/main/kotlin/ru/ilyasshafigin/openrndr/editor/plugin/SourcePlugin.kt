@@ -44,7 +44,7 @@ class SourcePlugin : EditorPlugin {
     val isSelected: Boolean get() = _isSelected
 
     /** Image selection event */
-    val selected = Event<ImageEvent>("editor-source-selected").postpone(true)
+    val selected = Event<ImageEvent>("editor-source-selected").apply { postpone = true }
 
     override fun setup(editor: Editor<*>) {
         _editor = editor
@@ -72,7 +72,7 @@ class SourcePlugin : EditorPlugin {
 
     private fun onFileSelected(selection: File) {
         val path = selection.path
-        if (path.toLowerCase().matches("^.*?\\.(gif|jpg|tga|png|tif)$".toRegex())) {
+        if (path.lowercase().matches("^.*?\\.(gif|jpg|tga|png|tif)$".toRegex())) {
             val loadedImage = Image(loadImage(selection).convertToRGBa())
             onImageLoaded(loadedImage, selection.name)
         } else {
@@ -82,7 +82,7 @@ class SourcePlugin : EditorPlugin {
 
     private fun onImageLoaded(loadedImage: Image, imageName: String) {
         _image.destroy()
-        _fileName = imageName.toLowerCase().replaceFirst("(?i)\\.(gif|jpg|tga|png|tif)".toRegex(), "")
+        _fileName = imageName.lowercase().replaceFirst("(?i)\\.(gif|jpg|tga|png|tif)".toRegex(), "")
         _area = if (_editor.height * loadedImage.width > _editor.width * loadedImage.height) {
             val h = _editor.width.toDouble() * loadedImage.height / loadedImage.width
             Rectangle(0.0, (_editor.height - h) * 0.5, _editor.width.toDouble(), h)
