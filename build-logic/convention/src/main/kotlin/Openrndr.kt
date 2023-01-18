@@ -25,10 +25,10 @@ private val Project.openrndrVersion: String
     get() = libs.findVersion("openrndr").get().toString()
 
 private val Project.orxVersion: String
-    get() = libs.findVersion("orx").get().toString()
+    get() = libs.findVersion("openrndr-orx").get().toString()
 
 private val Project.ormlVersion: String
-    get() = libs.findVersion("orml").get().toString()
+    get() = libs.findVersion("openrndr-orml").get().toString()
 
 private fun Project.getCurrentOs(): String = if (hasProperty("targetPlatform")) {
     val supportedPlatforms = setOf("windows", "macos", "linux-x64", "linux-arm64")

@@ -13,5 +13,5 @@ dependencies {
     implementation(openrndr.gl3)
     implementation(openrndr.gl3Natives)
 
-    runtimeOnly(libs.slf4j.simple)
+    runtimeOnly(libs.util.slf4j.simple)
 }

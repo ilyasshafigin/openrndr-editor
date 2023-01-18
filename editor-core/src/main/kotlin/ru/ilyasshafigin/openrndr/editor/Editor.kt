@@ -176,6 +176,10 @@ abstract class Editor<S : EditorSettings>(
         return plugin ?: throw IllegalStateException("'${T::class.simpleName}' is not installed")
     }
 
+    inline fun <reified T : EditorPlugin> getPluginOrNull(): T? {
+        return plugins.find { it is T } as? T
+    }
+
     class EditorProgram(private val editor: Editor<*>) : Program() {
 
         override suspend fun setup() {

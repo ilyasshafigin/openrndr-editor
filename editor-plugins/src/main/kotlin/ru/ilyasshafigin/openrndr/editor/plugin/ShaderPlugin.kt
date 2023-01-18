@@ -94,7 +94,7 @@ class ShaderPlugin : EditorPlugin {
             time += if (realTime) editor.deltaTime else (1.0 / frameRate)
         }
 
-        val sourcePlugin = if (editor.isPluginInstalled<SourcePlugin>()) editor.source else null
+        val sourcePlugin = editor.getPluginOrNull<SourcePlugin>()
         val canvasTarget = canvas.target
         val sourceColorBuffer = sourcePlugin?.image?.colorBuffer ?: canvasTarget.colorBuffer(0)
         val sourceOffset = sourcePlugin?.area?.corner ?: Vector2.ZERO
@@ -125,7 +125,7 @@ class ShaderPlugin : EditorPlugin {
 
     override fun afterDraw(drawer: Drawer, editor: Editor<*>) {
         shaders.values.reversed().forEach { shader ->
-            shader.afterDraw(drawer, canvas.target, editor.width, editor.height)
+            shader.afterDraw(drawer, canvas.target, editor.width, editor.height, editor.config.previewScale)
         }
     }
 
@@ -268,7 +268,7 @@ open class FragmentShader(private val shader: Shader) {
             filteredTarget?.width != canvasWidth ||
             filteredTarget?.height != canvasHeight
         ) {
-            filteredTarget?.detachColorBuffers()
+            filteredTarget?.detachColorAttachments()
             filteredTarget?.detachDepthBuffer()
             filteredTarget?.destroy()
             filteredTarget = renderTarget(canvasWidth, canvasHeight) {
@@ -278,7 +278,13 @@ open class FragmentShader(private val shader: Shader) {
         }
     }
 
-    fun afterDraw(drawer: Drawer, canvasTarget: RenderTarget, editorWidth: Int, editorHeight: Int) {
+    fun afterDraw(
+        drawer: Drawer,
+        canvasTarget: RenderTarget,
+        editorWidth: Int,
+        editorHeight: Int,
+        previewScale: Double
+    ) {
         filteredTarget?.let { filtered ->
             apply(canvasTarget.colorBuffer(0), filtered)
 
@@ -286,7 +292,7 @@ open class FragmentShader(private val shader: Shader) {
                 ortho()
                 view = Matrix44.IDENTITY
                 model = Matrix44.IDENTITY
-                image(filtered.colorBuffer(0), 0.0, 0.0, editorWidth * 1.0, editorHeight * 1.0)
+                image(filtered.colorBuffer(0), 0.0, 0.0, editorWidth / previewScale, editorHeight / previewScale)
             }
         }
     }
