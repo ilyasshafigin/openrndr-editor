@@ -46,10 +46,15 @@ abstract class Editor<S : EditorSettings>(
 
     val program = EditorProgram(this)
 
+    /** Same as [Program.width] */
     val width: Int get() = program.width
+
+    /** Same as [Program.height] */
     val height: Int get() = program.height
+
     val center: Vector2 by lazy { Vector2(width * 0.5, height * 0.5) }
     val resolution: Vector2 by lazy { Vector2(width * 1.0, height * 1.0) }
+    val aspectRatio: Double by lazy { resolution.x / resolution.y }
 
     val drawer: Drawer get() = program.drawer
     val driver: Driver get() = program.driver
@@ -125,7 +130,7 @@ abstract class Editor<S : EditorSettings>(
     /**
      * This is run exactly once before the first call to draw()
      */
-    open fun setup() {
+    open suspend fun setup() {
     }
 
     /**
@@ -217,34 +222,4 @@ abstract class Editor<S : EditorSettings>(
             }
         }
     }
-}
-
-fun Editor<*>.launch(
-    context: CoroutineContext = program.dispatcher,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
-    block: suspend CoroutineScope.() -> Unit
-): Job = program.launch(context, start, block)
-
-/**
- * Resolves resource named [name] relative to [clazz] as a [String] based URL.
- */
-fun resourceUrl(name: String, clazz: Class<*> = Editor::class.java): String {
-    var resource: URL? = clazz.getResource(name)
-    return if (resource == null) {
-        resource = clazz.classLoader.getResource(name)
-        if (resource == null) {
-            return name
-        } else {
-            resource.toExternalForm()
-        }
-    } else {
-        resource.toExternalForm()
-    }
-}
-
-/**
- * Resolves resource named [name] relative to [clazz] as a [String] based URL.
- */
-fun Editor<*>.resourceUrl(name: String, clazz: Class<*> = this::class.java): String {
-    return resourceUrl(name, clazz)
 }

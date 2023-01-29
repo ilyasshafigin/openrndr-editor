@@ -7,7 +7,7 @@ class EditorBuilder<S : EditorSettings>(
     val config: EditorConfig
 ) {
 
-    private var setupFun: Editor<S>.() -> Unit = {}
+    private var setupFun: suspend Editor<S>.() -> Unit = {}
     private var drawFun: Editor<S>.(Drawer) -> Unit = {}
     private var resetFun: Editor<S>.() -> Unit = {}
     private var editor: Editor<S>? = null
@@ -16,8 +16,9 @@ class EditorBuilder<S : EditorSettings>(
     val height: Int get() = editor!!.height
     val center: Vector2 get() = editor!!.center
     val resolution: Vector2 get() = editor!!.resolution
+    val aspectRatio: Double get() = editor!!.aspectRatio
 
-    fun setup(init: Editor<S>.() -> Unit) {
+    fun setup(init: suspend Editor<S>.() -> Unit) {
         setupFun = init
     }
 
@@ -30,7 +31,7 @@ class EditorBuilder<S : EditorSettings>(
     }
 
     fun <T : EditorPlugin> install(plugin: T): T {
-        return editor!!.install(plugin)
+        return checkNotNull(editor).install(plugin)
     }
 
     fun <T : EditorPlugin> install(plugin: T, init: T.() -> Unit): T {
@@ -42,24 +43,21 @@ class EditorBuilder<S : EditorSettings>(
         config: EditorConfig,
         settings: S,
         init: EditorBuilder<S>.() -> Unit
-    ): Editor<S> {
-        return object : Editor<S>(config) {
+    ): Editor<S> = object : Editor<S>(config) {
 
-            override val settings: S = settings
+        override val settings: S = settings
 
-            override fun setup() {
-                init()
-                setupFun(this)
-            }
+        override suspend fun setup() {
+            init()
+            setupFun(this)
+        }
 
-            override fun reset() {
-                resetFun(this)
-            }
+        override fun reset() {
+            resetFun(this)
+        }
 
-            override fun draw() {
-                drawFun(this, drawer)
-            }
-
-        }.also { editor = it }
-    }
+        override fun draw() {
+            drawFun(this, drawer)
+        }
+    }.also { editor = it }
 }

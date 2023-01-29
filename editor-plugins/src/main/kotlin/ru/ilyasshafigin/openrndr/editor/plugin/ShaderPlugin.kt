@@ -125,7 +125,7 @@ class ShaderPlugin : EditorPlugin {
 
     override fun afterDraw(drawer: Drawer, editor: Editor<*>) {
         shaders.values.reversed().forEach { shader ->
-            shader.afterDraw(drawer, canvas.target, editor.width, editor.height, editor.config.previewScale)
+            shader.afterDraw(drawer, canvas.target)
         }
     }
 
@@ -281,9 +281,6 @@ open class FragmentShader(private val shader: Shader) {
     fun afterDraw(
         drawer: Drawer,
         canvasTarget: RenderTarget,
-        editorWidth: Int,
-        editorHeight: Int,
-        previewScale: Double
     ) {
         filteredTarget?.let { filtered ->
             apply(canvasTarget.colorBuffer(0), filtered)
@@ -292,7 +289,7 @@ open class FragmentShader(private val shader: Shader) {
                 ortho()
                 view = Matrix44.IDENTITY
                 model = Matrix44.IDENTITY
-                image(filtered.colorBuffer(0), 0.0, 0.0, editorWidth / previewScale, editorHeight / previewScale)
+                image(filtered.colorBuffer(0))
             }
         }
     }

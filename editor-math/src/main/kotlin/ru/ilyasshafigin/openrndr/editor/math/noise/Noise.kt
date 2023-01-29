@@ -159,7 +159,7 @@ object Noise {
     }
 
     private fun stringToInt(str: String): Int = str.toCharArray().fold(0) { i: Int, c: Char ->
-        i + c.toInt()
+        i + c.code
     }
 
     private fun noise_fsc(i: Double): Double {

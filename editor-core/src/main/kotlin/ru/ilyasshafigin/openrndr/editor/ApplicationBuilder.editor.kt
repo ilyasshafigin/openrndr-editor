@@ -2,8 +2,9 @@ package ru.ilyasshafigin.openrndr.editor
 
 import org.openrndr.ApplicationBuilder
 import org.openrndr.Fullscreen
+import org.openrndr.application
 
-fun ApplicationBuilder.editor(
+fun editor(
     version: String = "1.0.0",
     format: EditorFormat = EditorFormat.HD,
     init: EditorBuilder<EditorSettings>.() -> Unit
@@ -16,7 +17,7 @@ fun ApplicationBuilder.editor(
     init = init
 )
 
-fun <S : EditorSettings> ApplicationBuilder.editor(
+fun <S : EditorSettings> editor(
     version: String = "1.0.0",
     format: EditorFormat = EditorFormat.HD,
     settings: S,
@@ -30,15 +31,22 @@ fun <S : EditorSettings> ApplicationBuilder.editor(
     init = init
 )
 
-fun <S : EditorSettings> ApplicationBuilder.editor(
+fun <S : EditorSettings> editor(
     config: EditorConfig = EditorConfig(),
     settings: S,
     init: EditorBuilder<S>.() -> Unit
-) {
+) = application {
     configure(config)
-
     val builder = EditorBuilder<S>(config)
     program = builder.build(config, settings, init).program
+}
+
+fun <S : EditorSettings> editor(
+    config: EditorConfig,
+    editorProvider: (config: EditorConfig) -> Editor<S>
+) = application {
+    configure(config)
+    program = editorProvider(config).program
 }
 
 fun ApplicationBuilder.configure(config: EditorConfig) {

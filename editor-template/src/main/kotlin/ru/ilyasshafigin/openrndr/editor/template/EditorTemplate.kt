@@ -1,11 +1,10 @@
 package ru.ilyasshafigin.openrndr.editor.template
 
-import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import ru.ilyasshafigin.openrndr.editor.Editor
 import ru.ilyasshafigin.openrndr.editor.EditorConfig
 import ru.ilyasshafigin.openrndr.editor.EditorFormat
-import ru.ilyasshafigin.openrndr.editor.configure
+import ru.ilyasshafigin.openrndr.editor.editor
 import ru.ilyasshafigin.openrndr.editor.plugin.ExportImagePlugin
 import ru.ilyasshafigin.openrndr.editor.plugin.SourcePlugin
 import ru.ilyasshafigin.openrndr.editor.plugin.export
@@ -15,7 +14,7 @@ private class TemplateEditor(config: EditorConfig) : Editor<Settings>(config) {
 
     override val settings = Settings()
 
-    override fun setup() {
+    override suspend fun setup() {
         install(SourcePlugin())
         install(ExportImagePlugin())
     }
@@ -68,13 +67,10 @@ private class TemplateEditor(config: EditorConfig) : Editor<Settings>(config) {
     }
 }
 
-fun main() = application {
-    val config = EditorConfig(
+fun main() = editor(
+    EditorConfig(
         version = "0.1.0",
         format = EditorFormat.HD
-    )
-
-    configure(config)
-
-    program = TemplateEditor(config).program
-}
+    ),
+    ::TemplateEditor
+)

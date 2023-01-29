@@ -1,12 +1,12 @@
 package ru.ilyasshafigin.openrndr.editor.math.flow
 
-import ru.ilyasshafigin.openrndr.editor.image.Image
-import ru.ilyasshafigin.openrndr.editor.math.degrees
-import ru.ilyasshafigin.openrndr.editor.math.fromAngle
-import ru.ilyasshafigin.openrndr.editor.math.handing
 import org.openrndr.extra.noise.Random
 import org.openrndr.math.Vector2
+import org.openrndr.math.asDegrees
 import org.openrndr.math.map
+import ru.ilyasshafigin.openrndr.editor.image.Image
+import ru.ilyasshafigin.openrndr.editor.math.fromAngle
+import ru.ilyasshafigin.openrndr.editor.math.heading
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
@@ -38,7 +38,7 @@ fun FlowField2.updateFromMouse(x: Double, y: Double, theta: Double, radius: Doub
             val distSquare = dx * dx + dy * dy
             if (distSquare > radius * radius) continue
 
-            var angle = field[i, j].handing
+            var angle = field[i, j].heading
             angle += (theta - angle) / sqrt(distSquare / 4)
             field[i, j] = Vector2.fromAngle(angle)
         }
@@ -52,7 +52,7 @@ fun FlowField2.updateSpiral(center: Vector2) {
             val y = j * resolution
             val dx = center.x - x
             val dy = center.y - y
-            val theta = atan2(dy, dx).degrees
+            val theta = atan2(dy, dx).asDegrees
             field[i, j] = Vector2.fromAngle(theta + 60.0) // PI/2 -> circle
         }
     }

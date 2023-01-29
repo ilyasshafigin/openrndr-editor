@@ -47,6 +47,7 @@ class Canvas {
     fun draw(drawer: Drawer, block: Drawer.() -> Unit) {
         var drawException: RuntimeException? = null
         drawer.isolatedWithTarget(target) {
+            ortho()
             try {
                 block()
             } catch (e: RuntimeException) {

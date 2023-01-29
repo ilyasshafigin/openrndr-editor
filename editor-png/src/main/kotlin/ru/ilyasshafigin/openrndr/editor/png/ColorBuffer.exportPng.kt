@@ -8,7 +8,7 @@ import java.util.*
 fun ColorBuffer.exportPng(
     sketchName: String,
     imageName: String = sketchName,
-    folderPath: String = "export/${sketchName.toLowerCase()}/png",
+    folderPath: String = "export/${sketchName.lowercase()}/png",
     timestamp: Long = System.currentTimeMillis(),
     fileDatePattern: String = "YYYYMMddHHmmss",
     async: Boolean = false
@@ -20,4 +20,3 @@ fun ColorBuffer.exportPng(
 
     saveToFile(File(directory, fileName), async = async)
 }
-
